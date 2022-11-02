@@ -23,23 +23,24 @@ class Depart(BaseModel):
     prix: str
     vehicule_fk: str
     plaque:Union[str, None] = None
-   
-@router.get("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+
+#@router.get("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.get("/",status_code=status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
     values = session.execute(text("select d.id as id,d.date_heure as date_heure, \
          dest.id as destination_fk, dest.nom as destination, \
-            concat(dest.prix,' ',dest.devise) as prix, veh.id as \
+            dest.prix as prix, veh.id as \
             vehicule_fk,veh.plaque as plaque from depart d \
          inner join destination dest on d.destination_fk = dest.id \
-         inner join vehicule veh on d.vehicule_fk = veh.id \
-            where d.date_heure >= now()")).fetchall()
+         inner join vehicule veh on d.vehicule_fk = veh.id ")).fetchall()
+            #where d.date_heure >= now()
     session.close()
     print(values)
     return values
 
 
-@router.get("/{id}", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 def read(id: str):
     session = db_session.factory()
  
@@ -50,7 +51,7 @@ def read(id: str):
     print(depart)
     return depart
 
-@router.post("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_201_CREATED)
+@router.post("/",status_code=status.HTTP_201_CREATED)
 def create(depart: Depart):
     print("Course: ",depart)
     new_depart = DepartModel(**depart.dict())
@@ -60,7 +61,7 @@ def create(depart: Depart):
     print(new_depart)
     return new_depart
 
-@router.delete("/{id}", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.delete("/{id}", status_code=status.HTTP_200_OK)
 def delete(id: str):
     session = db_session.factory()
     depart = session.query(DepartModel) \
@@ -71,7 +72,7 @@ def delete(id: str):
     session.delete(depart)
     session.commit() 
 
-@router.patch("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.patch("/", status_code=status.HTTP_200_OK)
 def update(new_depart: Depart):
     session = db_session.factory()
     old_depart = session.query(DepartModel) \
