@@ -26,11 +26,10 @@ class Auth(BaseModel):
 
 @router.post("/",status_code= status.HTTP_200_OK)
 def login(utilisateur: Utilisateur):
-    print(utilisateur)
+    
     session = db_session.factory()
     found = session.query(UtilisateurModel)\
             .filter(UtilisateurModel.login == utilisateur.login).first()
- 
     if found is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -48,13 +47,8 @@ def login(utilisateur: Utilisateur):
             detail="Login ou mot de passe incorrect."
         )
     token = signJWT(found.id, found.nom, found.role)
-    found.token = token
-    return {
-        "nom": found.nom,
-        "login": found.login,
-        "role": found.role,
-        "token": found.token
-    }
+    found.token = token['access_token']
+    return found
     
 
 
