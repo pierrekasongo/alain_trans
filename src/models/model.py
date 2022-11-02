@@ -85,4 +85,4 @@ class Utilisateur(Base):
     mot_de_passe = Column(String)
     role = Column(String)
     etat = Column(String)
-    
+    token = Column(String)
