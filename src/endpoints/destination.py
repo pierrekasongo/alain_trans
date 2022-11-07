@@ -18,7 +18,7 @@ class Destination(BaseModel):
     prix: int
     devise: str
 
-@router.get("/", status_code = status.HTTP_200_OK)
+@router.get("/",dependencies=[Depends(JWTBearer())], status_code = status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
  

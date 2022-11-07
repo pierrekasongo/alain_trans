@@ -16,13 +16,9 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-class Auth(BaseModel):
-    nom: Union[str, None] = None
-    login: str
-    mot_de_passe: str
-    role: Union[str, None] = None
-    etat: Union[str, None] = None
-    token: Union[str, None] = None
+@router.get("/", dependencies=[Depends(JWTBearer())],status_code= status.HTTP_200_OK)
+def check_token(utilisateur: Utilisateur):
+    return "OK"
 
 @router.post("/",status_code= status.HTTP_200_OK)
 def login(utilisateur: Utilisateur):

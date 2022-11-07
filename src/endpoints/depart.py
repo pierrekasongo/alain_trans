@@ -24,8 +24,7 @@ class Depart(BaseModel):
     vehicule_fk: str
     plaque:Union[str, None] = None
 
-#@router.get("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
-@router.get("/",status_code=status.HTTP_200_OK)
+@router.get("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
     values = session.execute(text("select d.id as id,d.date_heure as date_heure, \
@@ -40,7 +39,7 @@ def read_root():
     return values
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read(id: str):
     session = db_session.factory()
  
@@ -51,7 +50,7 @@ def read(id: str):
     print(depart)
     return depart
 
-@router.post("/",status_code=status.HTTP_201_CREATED)
+@router.post("/", dependencies=[Depends(JWTBearer())],status_code=status.HTTP_201_CREATED)
 def create(depart: Depart):
     print("Course: ",depart)
     new_depart = DepartModel(**depart.dict())
@@ -61,7 +60,7 @@ def create(depart: Depart):
     print(new_depart)
     return new_depart
 
-@router.delete("/{id}", status_code=status.HTTP_200_OK)
+@router.delete("/{id}", dependencies=[Depends(JWTBearer())],status_code=status.HTTP_200_OK)
 def delete(id: str):
     session = db_session.factory()
     depart = session.query(DepartModel) \
@@ -72,7 +71,7 @@ def delete(id: str):
     session.delete(depart)
     session.commit() 
 
-@router.patch("/", status_code=status.HTTP_200_OK)
+@router.patch("/", dependencies=[Depends(JWTBearer())],status_code=status.HTTP_200_OK)
 def update(new_depart: Depart):
     session = db_session.factory()
     old_depart = session.query(DepartModel) \

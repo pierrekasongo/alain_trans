@@ -35,7 +35,7 @@ def read_root():
     return user
 
 
-@router.get("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
+@router.get("/{id}",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read(id: int):
     session = db_session.factory()
  
@@ -66,7 +66,7 @@ def create(user: Utilisateur):
     print(new_user)
     return new_user
 
-@router.delete("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
+@router.delete("/{id}",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def delete(id: int):
     session = db_session.factory()
     user = session.query(UtilisateurModel) \
@@ -77,11 +77,29 @@ def delete(id: int):
     session.delete(user)
     session.commit() 
 
-@router.put("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
-def update(id: int, user: Utilisateur):
+
+#TO DO: patch vs put
+# Care about reset password and update without changing the verify_password
+# First, search the user by login
+# Change values
+# Then post back
+@router.put("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+def reset_password(user: Utilisateur):
     session = db_session.factory()
     old_user = session.query(UtilisateurModel) \
-        .filter(UtilisateurModel.id == id) \
+        .filter(UtilisateurModel.login == user.login) \
+        .first()
+ 
+    old_user.mot_de_passe = get_hashed_password(user.mot_de_passe)
+    print(old_user)
+    session.commit()
+    return old_user
+
+@router.patch("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+def update(user: Utilisateur):
+    session = db_session.factory()
+    old_user = session.query(UtilisateurModel) \
+        .filter(UtilisateurModel.login == user.login) \
         .first()
  
     old_user.nom = user.nom

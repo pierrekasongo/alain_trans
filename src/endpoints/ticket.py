@@ -22,7 +22,7 @@ class Ticket(BaseModel):
     utilisateur_fk: str
     depart_fk: str
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
  
@@ -32,7 +32,7 @@ def read_root():
     print(ticket)
     return ticket
 
-@router.get("/{course_id}",status_code=status.HTTP_200_OK)
+@router.get("/{course_id}",dependencies=[Depends(JWTBearer())],status_code=status.HTTP_200_OK)
 def get_by_course(course_id: str):
     session = db_session.factory()
  
@@ -43,7 +43,7 @@ def get_by_course(course_id: str):
     print("Result ",ticket)
     return ticket
 
-@router.get("/{id}",status_code=status.HTTP_200_OK)
+@router.get("/{id}",dependencies=[Depends(JWTBearer())],status_code=status.HTTP_200_OK)
 def read(id: str):
     session = db_session.factory()
  
