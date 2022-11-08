@@ -43,7 +43,7 @@ class Ticket(Base):
     code = Column(String)
     passager = Column(String)
     telephone = Column(String)
-    etat = Column(String, server_default=text("valide"))
+    etat = Column(String)
     utilisateur_fk = Column(ForeignKey('utilisateur.id'))
     depart_fk = Column(ForeignKey('depart.id'))
     
@@ -71,7 +71,7 @@ class Destination(Base):
     updated_at = Column(DateTime(True), server_default=text("now()"))
     nom = Column(String)
     prix = Column(Integer)
-    devise = Column(String, server_default=text("FCFA"))
+    devise = Column(String)
 
 
 class Utilisateur(Base):

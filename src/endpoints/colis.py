@@ -21,7 +21,7 @@ class Colis(BaseModel):
     code: str
     prix: str
 
-@router.get("/", dependencies=[Depends(JWTBearer())], status_code=200)
+@router.get("/",dependencies=[Depends(JWTBearer())],  status_code=200)
 def read_root():
     session = db_session.factory()
  
@@ -50,7 +50,7 @@ def create(colis: Colis):
     session.add(new_colis)
     session.commit()
     print(new_colis)
-    return new_colis.id
+    return new_colis
 
 @router.delete("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
 def delete(id: int):
@@ -76,4 +76,4 @@ def update(id: int, colis: Colis):
     old_colis.code = colis.code
     old_colis.prix = colis.prix
     session.commit()
-    return colis.id
+    return colis

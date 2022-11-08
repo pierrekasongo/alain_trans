@@ -61,7 +61,7 @@ def delete(id: str):
     session.delete(destination)
     session.commit() 
 
-@router.patch("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.patch("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def update(new_destination: Destination):
     session = db_session.factory()
     old_dest = session.query(DestinationModel) \

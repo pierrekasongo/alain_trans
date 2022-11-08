@@ -18,6 +18,7 @@ class Vehicule(BaseModel):
     nbre_place: int
     designation: str
 
+#@router.patch("/",""" dependencies=[Depends(JWTBearer())],""" status_code=status.HTTP_200_OK)
 @router.get("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
@@ -27,7 +28,7 @@ def read_root():
     return veh
 
 
-@router.get("/{plaque}", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.get("/{plaque}",dependencies=[Depends(JWTBearer())],  status_code=status.HTTP_200_OK)
 def read(plaque: str):
     session = db_session.factory()
  
@@ -38,7 +39,7 @@ def read(plaque: str):
     print(veh)
     return veh
 
-@router.post("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create( vehicule: Vehicule):
     print("Data: ", vehicule)
     new_veh = VehiculeModel(**vehicule.dict())
@@ -48,7 +49,7 @@ def create( vehicule: Vehicule):
     print(new_veh)
     return new_veh
 
-@router.delete("/{id}", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.delete("/{id}",dependencies=[Depends(JWTBearer())],  status_code=status.HTTP_200_OK)
 def delete(id: str):
     session = db_session.factory()
     veh = session.query(VehiculeModel) \
@@ -59,7 +60,7 @@ def delete(id: str):
     session.delete(veh)
     session.commit() 
 
-@router.patch("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
+@router.patch("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def update(new_vehicule: Vehicule):
     session = db_session.factory()
     old_veh = session.query(VehiculeModel) \

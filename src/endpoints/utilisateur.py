@@ -23,7 +23,8 @@ class Utilisateur(BaseModel):
     etat: Union[str, None] = None
     token: Union[str, None] = None
     
-@router.get("/",dependencies=[Depends(JWTBearer())] ,status_code=200)
+#@router.get("/","""dependencies=[Depends(JWTBearer())] ,"""status_code=200)
+@router.get("/", status_code=200)
 def read_root():
     session = db_session.factory()
  
@@ -46,7 +47,7 @@ def read(id: int):
     print(user)
     return user
 
-@router.post("/",dependencies=[Depends(JWTBearer())], status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create(user: Utilisateur):
     new_user = UtilisateurModel(**user.dict())
     session = db_session.factory()

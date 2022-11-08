@@ -89,4 +89,4 @@ def update(id: str, ticket: Ticket):
     old_ticket.depart_fk = ticket.depart_fk
     session.commit()
     print(old_ticket)
-    return old_ticket.id
+    return old_ticket

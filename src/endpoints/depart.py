@@ -83,4 +83,4 @@ def update(new_depart: Depart):
     old_depart.vehicule_fk = new_depart.vehicule_fk
    
     session.commit()
-    return old_depart;
+    return old_depart
