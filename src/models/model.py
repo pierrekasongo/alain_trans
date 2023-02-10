@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, String, UniqueConstraint,Text, text
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric,Boolean,String, UniqueConstraint,Text, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,6 +15,7 @@ class Vehicule(Base):
     plaque = Column(String, unique=True)
     nbre_place = Column(Integer)
     designation = Column(String)
+    partenaire = Column(Boolean, unique=False, default=False)
 
     def __repr__(self):
         return f'<Vehicule {self.id} ({self.plaque} {self.nbre_place})>'
@@ -60,6 +61,9 @@ class Colis(Base):
     poids = Column(String)
     code = Column(String)
     prix = Column(Numeric)
+    retire_par = Column(String)
+    telephone = Column(String)
+
 
 
 
@@ -71,6 +75,8 @@ class Destination(Base):
     updated_at = Column(DateTime(True), server_default=text("now()"))
     nom = Column(String)
     prix = Column(Integer)
+    prix_promo = Column(Integer)
+    en_promo = Column(Boolean)
     devise = Column(String)
 
 

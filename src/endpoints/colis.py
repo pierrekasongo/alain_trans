@@ -15,36 +15,37 @@ router = APIRouter(
 
 class Colis(BaseModel):
     id:Union[str, None] = None
-    date_retrait: Union[datetime, None] = None
+    date_retrait: Union[str, None] = None
     designation: str
-    poids: float
+    poids: str
     code: str
-    prix: str
+    prix: int
+    retire_par: Union[str, None] = None
+    telephone: Union[str, None] = None
 
 @router.get("/",dependencies=[Depends(JWTBearer())],  status_code=200)
 def read_root():
     session = db_session.factory()
- 
     colis = session.query(ColisModel) \
         .all()
     session.close()
     print(colis)
     return colis
 
-
-@router.get("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
-def read(id: int):
+@router.get("/{code}",dependencies=[Depends(JWTBearer())], status_code=200)
+def read(code: str):
     session = db_session.factory()
- 
     colis =session.query(ColisModel) \
-        .filter(ColisModel.id == id) \
+        .filter(ColisModel.code == code) \
         .first()
     session.close()
     print(colis)
     return colis
 
-@router.post("/",dependencies=[Depends(JWTBearer())], status_code=200)
+@router.post("/",dependencies=[Depends(JWTBearer())], status_code=201)
 def create(colis: Colis):
+    if(colis.date_retrait == ''):
+        colis.date_retrait = None
     new_colis = ColisModel(**colis.dict())
     session = db_session.factory()
     session.add(new_colis)
@@ -63,17 +64,23 @@ def delete(id: int):
     session.delete(colis)
     session.commit() 
 
-@router.put("/{id}",dependencies=[Depends(JWTBearer())], status_code=200)
-def update(id: int, colis: Colis):
+@router.patch("/",dependencies=[Depends(JWTBearer())], status_code=200)
+def update(new_colis: Colis):
     session = db_session.factory()
     old_colis =session.query(ColisModel) \
-        .filter(ColisModel.id == id) \
+        .filter(ColisModel.code == new_colis.code) \
         .first()
-    old_colis.date_retrait = colis.date_retrait
-    old_colis.designation = colis.designation
-    old_colis.poids = colis.poids
-    old_colis.code = colis.code
-    old_colis.code = colis.code
-    old_colis.prix = colis.prix
+    
+    dateStr = new_colis.date_retrait.replace("/", "-")
+    formatDate = datetime.strptime(dateStr, '%d-%m-%Y')
+
+    old_colis.date_retrait = new_colis.date_retrait
+    old_colis.designation = new_colis.designation
+    old_colis.poids = new_colis.poids
+    old_colis.code = new_colis.code
+    old_colis.prix = new_colis.prix
+    old_colis.date_retrait = formatDate
+    old_colis.retire_par = new_colis.retire_par
+    old_colis.telephone = new_colis.telephone
     session.commit()
-    return colis
+    return new_colis

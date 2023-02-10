@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 @router.get("/", dependencies=[Depends(JWTBearer())],status_code= status.HTTP_200_OK)
-def check_token(utilisateur: Utilisateur):
+def check_token():
     return "OK"
 
 @router.post("/",status_code= status.HTTP_200_OK)

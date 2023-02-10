@@ -16,6 +16,8 @@ class Destination(BaseModel):
     id:Union[str, None] = None
     nom: str
     prix: int
+    prix_promo: Union[int, None] = None
+    en_promo: Union[bool, None] = None
     devise: str
 
 @router.get("/",dependencies=[Depends(JWTBearer())], status_code = status.HTTP_200_OK)
@@ -69,5 +71,7 @@ def update(new_destination: Destination):
         .first()
     old_dest.nom = new_destination.nom
     old_dest.prix = new_destination.prix
+    old_dest.prix_promo = new_destination.prix_promo
+    old_dest.en_promo = new_destination.en_promo
     session.commit()
     return new_destination

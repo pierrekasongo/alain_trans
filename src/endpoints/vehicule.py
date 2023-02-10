@@ -17,8 +17,8 @@ class Vehicule(BaseModel):
     plaque: str
     nbre_place: int
     designation: str
+    partenaire:bool
 
-#@router.patch("/",""" dependencies=[Depends(JWTBearer())],""" status_code=status.HTTP_200_OK)
 @router.get("/", dependencies=[Depends(JWTBearer())], status_code=status.HTTP_200_OK)
 def read_root():
     session = db_session.factory()
@@ -69,5 +69,6 @@ def update(new_vehicule: Vehicule):
     old_veh.plaque = new_vehicule.plaque
     old_veh.nbre_place = new_vehicule.nbre_place
     old_veh.designation = new_vehicule.designation
+    old_veh.partenaire = new_vehicule.partenaire
     session.commit()
     return new_vehicule
