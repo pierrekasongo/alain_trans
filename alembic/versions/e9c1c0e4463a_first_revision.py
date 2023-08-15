@@ -1,8 +1,8 @@
-"""Last revision
+"""First revision
 
-Revision ID: 4f6dd936904e
+Revision ID: e9c1c0e4463a
 Revises: 
-Create Date: 2022-11-01 16:06:43.744960
+Create Date: 2023-08-15 14:05:11.972504
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '4f6dd936904e'
+revision = 'e9c1c0e4463a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,8 @@ def upgrade() -> None:
     sa.Column('poids', sa.String(), nullable=True),
     sa.Column('code', sa.String(), nullable=True),
     sa.Column('prix', sa.Numeric(), nullable=True),
+    sa.Column('retire_par', sa.String(), nullable=True),
+    sa.Column('telephone', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('destination',
@@ -35,6 +37,8 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('nom', sa.String(), nullable=True),
     sa.Column('prix', sa.Integer(), nullable=True),
+    sa.Column('prix_promo', sa.Integer(), nullable=True),
+    sa.Column('en_promo', sa.Boolean(), nullable=True),
     sa.Column('devise', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -47,6 +51,7 @@ def upgrade() -> None:
     sa.Column('mot_de_passe', sa.String(), nullable=True),
     sa.Column('role', sa.String(), nullable=True),
     sa.Column('etat', sa.String(), nullable=True),
+    sa.Column('token', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('vehicule',
@@ -56,6 +61,7 @@ def upgrade() -> None:
     sa.Column('plaque', sa.String(), nullable=True),
     sa.Column('nbre_place', sa.Integer(), nullable=True),
     sa.Column('designation', sa.String(), nullable=True),
+    sa.Column('partenaire', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('plaque')
     )
